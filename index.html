@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Valentine 💖</title>
+  <style>
+    :root{
+      --pink1:#ffd1dc;
+      --pink2:#f7b7c4;
+      --pink3:#f2a7b7;
+      --title:#8b1f3f;
+      --muted:#a83a5b;
+      --card: rgba(255,255,255,0.20);
+      --cardBorder: rgba(255,255,255,0.35);
+      --shadow: rgba(0,0,0,0.20);
+      --yes1:#ff4d7d;
+      --yes2:#ff2f6a;
+      --noBg: rgba(255,255,255,0.70);
+      --noBorder: rgba(120,120,120,0.20);
+      --bubbleBg: rgba(240, 245, 250, 0.95);
+      --bubbleBorder: rgba(80, 120, 160, 0.30);
+      --ring: rgba(255,255,255,0.30);
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      overflow:hidden;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:
+        radial-gradient(1100px 700px at 20% 10%, #ffe2ea 0%, transparent 55%),
+        radial-gradient(900px 600px at 80% 20%, #ffd1dc 0%, transparent 55%),
+        radial-gradient(900px 650px at 50% 90%, #f6a9b8 0%, transparent 60%),
+        linear-gradient(180deg, var(--pink1), var(--pink2));
+      display:grid;
+      place-items:center;
+      padding:18px;
+      position:relative;
+    }
+
+    /* Floating hearts background */
+    .hearts {
+      position:fixed; inset:0;
+      pointer-events:none;
+      opacity:0.25;
+      background-image:
+        radial-gradient(circle at 12% 18%, rgba(255,77,125,.45) 0 6px, transparent 7px),
+        radial-gradient(circle at 28% 62%, rgba(255,120,160,.35) 0 7px, transparent 8px),
+        radial-gradient(circle at 75% 30%, rgba(255,77,125,.30) 0 5px, transparent 6px),
+        radial-gradient(circle at 86% 70%, rgba(255,120,160,.30) 0 7px, transparent 8px),
+        radial-gradient(circle at 48% 18%, rgba(255,160,190,.25) 0 6px, transparent 7px),
+        radial-gradient(circle at 60% 78%, rgba(255,120,160,.22) 0 6px, transparent 7px);
+      filter: blur(.2px);
+      animation: float 10s ease-in-out infinite alternate;
+    }
+    @keyframes float{
+      from{ transform: translateY(0px); }
+      to{ transform: translateY(-18px); }
+    }
+
+    /* Main card */
+    .card{
+      width:min(760px, 94vw);
+      border-radius:26px;
+      background: var(--card);
+      border:1px solid var(--cardBorder);
+      box-shadow: 0 20px 70px var(--shadow);
+      backdrop-filter: blur(10px);
+      padding: 34px 20px 24px;
+      text-align:center;
+      position:relative;
+      z-index: 1;
+    }
+
+    h1{
+      margin:0 0 10px;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.05;
+      font-weight: 800;
+      color: var(--title);
+      letter-spacing: 0.2px;
+      text-shadow: 0 2px 0 rgba(255,255,255,0.35);
+    }
+    .sub{
+      margin:0 0 18px;
+      font-size: clamp(18px, 2.6vw, 28px);
+      color: var(--title);
+      font-weight: 700;
+    }
+
+    .quote{
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-style: italic;
+      font-size: clamp(14px, 2vw, 16px);
+      opacity: 0.95;
+    }
+
+    /* ✅ Bigger play area for No movement */
+    .btnStage{
+      margin: 18px auto 8px;
+      width: min(720px, 94vw);
+      height: clamp(260px, 42vh, 420px);
+      position:relative;
+      border-radius:22px;
+      border: 1px dashed rgba(255,255,255,0.35);
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
+      overflow:hidden; /* keep No + bubble inside */
+      isolation: isolate; /* creates stacking context */
+    }
+
+    /* ✅ Safe zone where Yes button stays (No must never overlap this zone) */
+    .yesZone{
+      position:absolute;
+      left:50%;
+      top:44%;
+      transform: translate(-50%, -50%);
+      width: 220px;
+      height: 80px;
+      border-radius: 999px;
+      pointer-events:none;
+      z-index: 1;
+      /* uncomment to visualize:
+      outline: 2px solid rgba(0,0,0,0.12);
+      background: rgba(255,255,255,0.08);
+      */
+    }
+
+    /* YES button */
+    .yesWrap{
+      position:absolute;
+      left:50%;
+      top:44%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+    }
+    button{
+      border:0;
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 750;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.25);
+      transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+      position:relative;
+      z-index: 2;
+    }
+    button:active{ transform: translateY(1px) scale(.99); }
+
+    #yesBtn{
+      min-width: 170px;
+      background: linear-gradient(180deg, var(--yes1), var(--yes2));
+      color: #fff;
+    }
+    #yesBtn:hover{ filter: brightness(1.03); }
+
+    /* NO button (runs away) */
+    #noBtn{
+      position:absolute;
+      left: 14%;
+      top: 78%;
+      transform: translate(-50%,-50%);
+      background: var(--noBg);
+      border: 1px solid var(--noBorder);
+      color: #2b2b2b;
+      min-width: 110px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.10);
+      z-index: 3; /* always above background, but we still avoid Yes zone by logic */
+    }
+
+    /* Speech bubble */
+    .bubble{
+      position:absolute;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: var(--bubbleBg);
+      border: 2px solid var(--bubbleBorder);
+      color:#1d2a35;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+      opacity: 0;
+      transform: translateY(10px) scale(0.98);
+      pointer-events:none;
+      white-space: nowrap;
+      z-index: 4;
+      max-width: min(84vw, 520px);
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    .bubble.show{ animation: pop 1.6s ease forwards; }
+    @keyframes pop{
+      0%   { opacity:0; transform: translateY(10px) scale(0.98); }
+      15%  { opacity:1; transform: translateY(0) scale(1); }
+      75%  { opacity:1; transform: translateY(0) scale(1); }
+      100% { opacity:0; transform: translateY(-6px) scale(0.99); }
+    }
+
+    .result{
+      margin-top: 12px;
+      min-height: 26px;
+      color: var(--muted);
+      font-weight: 650;
+    }
+    .tiny{
+      margin-top: 10px;
+      font-size: 12px;
+      color: rgba(168,58,91,0.65);
+    }
+
+    /* ✅ Confetti canvas overlay */
+    canvas#confetti{
+      position:fixed;
+      inset:0;
+      width:100vw;
+      height:100vh;
+      pointer-events:none;
+      z-index: 50;
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts"></div>
+  <canvas id="confetti"></canvas>
+
+  <div class="card">
+    <h1>❤️ <span id="name">Sayani</span> ❤️</h1>
+    <div class="sub">Will you be my Valentine? 💖</div>
+
+    <div class="btnStage" id="stage">
+      <div class="yesZone" id="yesZone" aria-hidden="true"></div>
+
+      <div class="yesWrap">
+        <button id="yesBtn" type="button">Yes! 💕</button>
+      </div>
+
+      <button id="noBtn" type="button">No</button>
+      <div class="bubble" id="bubble">Really?</div>
+    </div>
+
+    <div class="quote">"Every moment with you feels like a dream come true..."</div>
+    <div class="result" id="result"></div>
+    <div class="tiny">Tip: “No” dodges both mouse and taps 😄</div>
+  </div>
+
+  <script>
+    /********************
+     * 1) No-button logic + custom bubble text
+     *    ✅ Bigger area
+     *    ✅ Avoid overlap with Yes zone
+     *    ✅ Never goes outside stage
+     ********************/
+    const stage  = document.getElementById("stage");
+    const yesZone = document.getElementById("yesZone");
+    const noBtn  = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const bubble = document.getElementById("bubble");
+    const result = document.getElementById("result");
+
+    const noMessages = [
+      "Really?",
+      "Try again!",
+      "You sure?",
+      "Haha nice try!",
+      "No escape!",
+      "Nice try 😏",
+      "You can't escape love 💘",
+      "You're testing my patience 😅",
+      "Not allowed 😌",
+      "Oops… missed it!",
+      "Nope 😤",
+      "Pick the pink one 😇"
+    ];
+    let noCount = 0;
+
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+    function rectsOverlap(a, b){
+      return !(a.right < b.left || a.left > b.right || a.bottom < b.top || a.top > b.bottom);
+    }
+
+    function showBubble(text, x, y){
+      bubble.textContent = text;
+
+      // reset to measure
+      bubble.style.left = "0px";
+      bubble.style.top = "0px";
+      bubble.classList.remove("show");
+      void bubble.offsetWidth;
+
+      const st = stage.getBoundingClientRect();
+      const bw = bubble.getBoundingClientRect().width;
+      const bh = bubble.getBoundingClientRect().height;
+
+      // Try above the No button; if near top, show below
+      let bx = x + 12;
+      let by = y - bh - 16;
+      if (by < 10) by = y + 16;
+
+      bx = clamp(bx, 10, st.width - bw - 10);
+      by = clamp(by, 10, st.height - bh - 10);
+
+      bubble.style.left = bx + "px";
+      bubble.style.top  = by + "px";
+      bubble.classList.add("show");
+    }
+
+    function moveNoButton(withMessage = true){
+      const st = stage.getBoundingClientRect();
+      const nb = noBtn.getBoundingClientRect();
+      const yz = yesZone.getBoundingClientRect();
+
+      // Convert yesZone rect to stage-local coordinates:
+      const yesLocal = {
+        left: yz.left - st.left,
+        top: yz.top - st.top,
+        right: yz.right - st.left,
+        bottom: yz.bottom - st.top
+      };
+
+      const pad = 14;
+      const maxX = st.width - nb.width - pad;
+      const maxY = st.height - nb.height - pad;
+
+      let x = 0, y = 0;
+      let tries = 0;
+
+      // Try multiple times to find a spot that doesn't overlap the yesZone
+      while (tries < 40){
+        x = pad + Math.random() * clamp(maxX, 0, maxX);
+        y = pad + Math.random() * clamp(maxY, 0, maxY);
+
+        const candidate = {
+          left: x,
+          top: y,
+          right: x + nb.width,
+          bottom: y + nb.height
+        };
+
+        // Add a little buffer around yesZone so it never feels like overlap
+        const buffer = 18;
+        const yesBuffered = {
+          left: yesLocal.left - buffer,
+          top: yesLocal.top - buffer,
+          right: yesLocal.right + buffer,
+          bottom: yesLocal.bottom + buffer
+        };
+
+        if (!rectsOverlap(candidate, yesBuffered)) break;
+        tries++;
+      }
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top  = y + "px";
+      noBtn.style.transform = "translate(0,0)";
+
+      if (withMessage){
+        const msg = noMessages[noCount % noMessages.length];
+        showBubble(msg, x, y);
+        noCount++;
+      }
+    }
+
+    // Dodge on hover/approach (desktop)
+    noBtn.addEventListener("mouseenter", () => moveNoButton(true));
+    noBtn.addEventListener("pointerenter", () => moveNoButton(true));
+
+    // Dodge on press/tap (mobile)
+    noBtn.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      moveNoButton(true);
+    });
+
+    // If click still happens
+    noBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      moveNoButton(true);
+    });
+
+    // On resize, re-place no so it doesn't end up in a weird spot
+    window.addEventListener("resize", () => {
+      setTimeout(() => moveNoButton(false), 50);
+    });
+
+    // initial placement
+    setTimeout(() => moveNoButton(false), 80);
+
+    /********************
+     * 2) Confetti (canvas) - same vibe as previous
+     ********************/
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d", { alpha: true });
+
+    function resizeCanvas(){
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      canvas.width  = Math.floor(window.innerWidth  * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    const confettiColors = ["#ff4d7d","#ffb3c4","#ffd166","#8be9fd","#b8ffb8","#cdb4ff"];
+
+    class Confetto {
+      constructor(x, y) {
+        this.x = x; this.y = y;
+        this.size = 6 + Math.random() * 8;
+        this.w = this.size * (0.6 + Math.random());
+        this.h = this.size * (0.9 + Math.random() * 1.2);
+        const angle = (-Math.PI/2) + (Math.random() * Math.PI/2) - (Math.PI/4);
+        const speed = 6 + Math.random() * 10;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.rot = Math.random() * Math.PI;
+        this.vr  = (Math.random() - 0.5) * 0.25;
+        this.color = confettiColors[(Math.random() * confettiColors.length) | 0];
+        this.life = 0;
+        this.maxLife = 170 + (Math.random() * 40);
+      }
+      step() {
+        this.vy += 0.22;
+        this.vx *= 0.99;
+        this.vy *= 0.995;
+        this.x += this.vx;
+        this.y += this.vy;
+        this.rot += this.vr;
+        this.life++;
+        const t = this.life / this.maxLife;
+        this.alpha = t < 0.75 ? 1 : (1 - (t - 0.75) / 0.25);
+        return this.life < this.maxLife && this.y < window.innerHeight + 80;
+      }
+      draw(ctx) {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, Math.min(1, this.alpha));
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rot);
+        ctx.fillStyle = this.color;
+        ctx.fillRect(-this.w/2, -this.h/2, this.w, this.h);
+        ctx.restore();
+      }
+    }
+
+    let confetti = [];
+    let animating = false;
+
+    function burstConfetti() {
+      const cx = window.innerWidth / 2;
+      const cy = Math.min(window.innerHeight * 0.42, 360);
+      for (let i = 0; i < 220; i++) confetti.push(new Confetto(cx, cy));
+      if (!animating) {
+        animating = true;
+        requestAnimationFrame(loop);
+      }
+    }
+
+    function loop() {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      confetti = confetti.filter(c => {
+        const alive = c.step();
+        c.draw(ctx);
+        return alive;
+      });
+      if (confetti.length > 0) requestAnimationFrame(loop);
+      else {
+        animating = false;
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      }
+    }
+
+    /********************
+     * 3) Yes button action
+     ********************/
+    yesBtn.addEventListener("click", () => {
+      result.textContent = "Yay! 💖 Now you’re officially my Valentine 😌";
+
+      yesBtn.disabled = true;
+      noBtn.disabled = true;
+
+      yesBtn.style.cursor = "default";
+      noBtn.style.cursor = "default";
+      noBtn.style.opacity = "0.7";
+
+      burstConfetti();
+    });
+  </script>
+</body>
+</html>
